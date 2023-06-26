@@ -1,0 +1,35 @@
+{
+  "name": "ddac-assignment-backend",
+  "version": "1.0.0",
+  "description": "Deployment in the cloud assignment :( but this is backend :(((",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon -L index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/makluganteng/DDAC-Assignment-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/makluganteng/DDAC-Assignment-Backend/issues"
+  },
+  "homepage": "https://github.com/makluganteng/DDAC-Assignment-Backend#readme",
+  "dependencies": {
+    "ts-node": "^10.9.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.3.1",
+    "@types/cors": "^2.8.13",
+    "typescript": "^5.1.3"
+  }
+}
