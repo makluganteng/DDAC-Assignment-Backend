@@ -6,4 +6,6 @@ export const subscriptionRouter = () => {
   const subscriptionController = new SubscriptionController();
 
   router.post("/addSubscription", subscriptionController.addSubscription);
+
+  return router;
 };

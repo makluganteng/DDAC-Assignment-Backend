@@ -1,37 +1,30 @@
-import { add } from "winston";
-import { createSubscription } from "../../services/sns";
+import { Request, Response } from "express";
+import { generateToken } from "../../services/jwt";
 import { logger } from "../../services/logger";
 
-export class SubscriptionController {
+export class AdminController {
   constructor() {}
-
-  addSubscription = async (req: any, res: any) => {
-    logger.info("Subscription Data is :", req.body);
+  loginAdmin = async (req: Request, res: Response) => {
     try {
-      logger.info("Checking email");
-      if (!req.body.email) {
+      const { username, password } = req.body;
+      if (username !== "admin" && password !== "admin") {
         return res.status(400).send({
           headers: {
             "Access-Control-Allow-Origin": "*",
           },
           status: "error",
-          message: "No email provided",
+          message: "Admin not found",
         });
       }
-      const input = {
-        Protocol: "email",
-        TopicArn: process.env.AWS_SNS_ARN,
-        Endpoint: req.body.email,
-      };
-      const add = await createSubscription(input);
 
-      logger.info("Subscription Success:", add);
+      const token = generateToken(username);
+
       return res.status(200).send({
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
         status: "success",
-        message: "Subscription added please confirm your email",
+        message: token,
       });
     } catch (e) {
       logger.info("Error is :", e);

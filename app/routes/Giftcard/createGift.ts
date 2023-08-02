@@ -5,11 +5,16 @@ export const createGiftRouter = () => {
   const router = Router();
   const createGiftController = new GiftController();
 
-  const upload = multer({ dest: "files" });
+  const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 1024 * 1024 * 10, // 10 MB (adjust the size limit as needed)
+    },
+  });
 
   router.post(
     "/createGift",
-    upload.any(),
+    upload.array("image", 2),
     createGiftController.uploadNewVoucher
   );
 
@@ -17,7 +22,24 @@ export const createGiftRouter = () => {
 
   router.post("/deleteVoucher/:id", createGiftController.deleteVoucher);
 
-  router.post("/updateVoucher/:id", createGiftController.updateVoucher);
+  router.post(
+    "/updateVoucher/:id",
+    upload.any(),
+    createGiftController.updateVoucher
+  );
+
+  router.post("/buyVoucher", createGiftController.buyVoucher);
+
+  router.get("/getCategory", createGiftController.getVoucherCategory);
+
+  router.get("/getVoucher/:id", createGiftController.getVoucherByCategory);
+
+  router.get(
+    "/getCategoryByName/:category",
+    createGiftController.getVoucherByCategoryName
+  );
+
+  router.get("/getVoucherNewest", createGiftController.getVoucherNewest);
 
   return router;
 };
