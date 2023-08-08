@@ -1,11 +1,14 @@
 import { Pool } from "pg";
 import { logger } from "./logger";
 import fs from "fs";
+import * as AWSXRay from "aws-xray-sdk";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-export const pool = new Pool({
+const tracedPg = AWSXRay.capturePostgres(require("pg"));
+
+export const pool = new tracedPg.Pool({
   host: process.env.RDS_HOST,
   user: process.env.RDS_USER,
   database: process.env.RDS_DB,
@@ -18,6 +21,14 @@ export const pool = new Pool({
 
 export const createDbConnection = async () => {
   logger.info("Connecting to database...");
-  const client = await pool.connect();
-  return { pool, client };
+  const subsegment = AWSXRay.getSegment()?.addNewSubsegment("DBConnect");
+  try {
+    const client = await pool.connect();
+    subsegment?.close();
+    return { pool, client };
+  } catch (e: any) {
+    subsegment?.addError(e);
+    subsegment?.close();
+    throw e;
+  }
 };

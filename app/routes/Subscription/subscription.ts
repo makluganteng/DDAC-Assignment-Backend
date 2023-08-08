@@ -1,4 +1,5 @@
 import { Router } from "express";
+import * as AWSXRay from "aws-xray-sdk";
 import { SubscriptionController } from "../../controllers/Subscription/subscription";
 
 export const subscriptionRouter = () => {

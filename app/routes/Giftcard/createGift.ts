@@ -18,6 +18,12 @@ export const createGiftRouter = () => {
     createGiftController.uploadNewVoucher
   );
 
+  router.post(
+    "/createCategory",
+    upload.array("image", 1),
+    createGiftController.uploadCategory
+  );
+
   router.get("", createGiftController.getAllVoucher);
 
   router.post("/deleteVoucher/:id", createGiftController.deleteVoucher);
@@ -40,6 +46,8 @@ export const createGiftRouter = () => {
   );
 
   router.get("/getVoucherNewest", createGiftController.getVoucherNewest);
+
+  router.post("/deleteCategory/:id", createGiftController.deleteCategory);
 
   return router;
 };

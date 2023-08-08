@@ -5,6 +5,7 @@ import { createGiftRouter } from "./Giftcard/createGift";
 import { customerRouter } from "./Customer/customer";
 import { subscriptionRouter } from "./Subscription/subscription";
 import { adminRouter } from "./Admin/admin";
+import * as AWSXRay from "aws-xray-sdk";
 
 export const rootRouter = () => {
   const router = Router();
