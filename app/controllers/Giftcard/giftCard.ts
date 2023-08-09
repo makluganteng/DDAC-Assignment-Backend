@@ -75,7 +75,7 @@ export class GiftController {
           text: `INSERT INTO category (category_name, category_image_url) VALUES ($1, $2) RETURNING *`,
           values: [
             category,
-            `https://ddac-data.s3.amazonaws.com/images/${file[1].originalname}`,
+            `https://d1yeknl0fz3e4e.cloudfront.net/images/${file[1].originalname}`,
           ],
         });
 
@@ -99,7 +99,7 @@ export class GiftController {
         values: [
           voucherName,
           voucherPrice,
-          `https://ddac-data.s3.amazonaws.com/images/${file[0].originalname}`,
+          `https://d1yeknl0fz3e4e.cloudfront.net/images/${file[0].originalname}`,
           temp,
         ],
       });
@@ -219,14 +219,20 @@ export class GiftController {
           text: `INSERT INTO category (category_name, category_image_url) VALUES ($1, $2) RETURNING *`,
           values: [
             category,
-            `https://ddac-data.s3.amazonaws.com/images/${file[0].originalname}`,
+            `https://d1yeknl0fz3e4e.cloudfront.net/images/${file[0].originalname}`,
           ],
         });
 
         logger.info("Check Category:", rows1);
         temp = rows1[0].id;
       } else {
-        temp = rows[0].id;
+        return res.status(400).send({
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          status: "error",
+          message: "Category already exist",
+        });
       }
 
       const s3Segment = uploadSegment.addNewSubsegment("Upload to S3");
@@ -703,7 +709,7 @@ export class GiftController {
         from: process.env.EMAIL ?? "zksyncwalletwallet@gmail.com",
         to: email,
         subject: "Voucher Bought :3",
-        text: `Vocuher ${voucherName} has been bought here is the code ${voucherCode}`,
+        text: `Voucher ${voucherName} has been bought here is the code ${voucherCode}`,
       };
 
       emailFunc?.close();
